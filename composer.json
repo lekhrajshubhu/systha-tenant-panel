@@ -1,0 +1,22 @@
+{
+  "name": "systha/tenantpanel",
+  "description": "Independent Tenant Panel Package",
+  "type": "library",
+  "license": "proprietary",
+  "minimum-stability": "dev",
+  "require": {
+    "systha/core": "*@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "Systha\\tenantpanel\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Systha\\tenantpanel\\TenantpanelServiceProvider"
+      ]
+    }
+  }
+}
