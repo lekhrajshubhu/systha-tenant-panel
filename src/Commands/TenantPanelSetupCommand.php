@@ -14,6 +14,8 @@ class TenantPanelSetupCommand extends Command
 
     public function handle(): int
     {
+        $this->ensureJwtConfigured();
+
         $packageRoot = dirname(__DIR__, 2);
         $frontendPath = $packageRoot . '/' . trim((string) config('tenantpanel.frontend_path', 'resources'), '/');
         $distPath = $frontendPath . '/dist';
@@ -50,6 +52,20 @@ class TenantPanelSetupCommand extends Command
         $this->info("Tenant panel assets published to: {$targetPath}");
 
         return self::SUCCESS;
+    }
+
+    private function ensureJwtConfigured(): void
+    {
+        $jwtConfigPath = config_path('jwt.php');
+        if (!file_exists($jwtConfigPath)) {
+            $this->call('vendor:publish', [
+                '--provider' => 'Tymon\\JWTAuth\\Providers\\LaravelServiceProvider',
+            ]);
+        }
+
+        if (!env('JWT_SECRET')) {
+            $this->call('jwt:secret');
+        }
     }
 
     private function runProcess(array $command, string $cwd, string $title): bool
